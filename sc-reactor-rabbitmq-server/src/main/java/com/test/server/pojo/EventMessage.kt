@@ -11,6 +11,7 @@ import java.util.*
 class EventMessage<T> {
 
   var eventCode: String = ""
+  var broadcast: Boolean = false
   var conditions: Set<String> = Collections.emptySet()
   var payload: T? = null
   var delayMillis: Long = -1L

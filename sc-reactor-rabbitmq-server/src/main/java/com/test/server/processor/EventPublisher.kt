@@ -1,7 +1,6 @@
 package com.test.server.processor
 
-import com.test.server.pojo.EventMessage
-import com.test.server.pojo.common.Res
+import com.test.api.pojo.common.Res
 import reactor.core.publisher.Mono
 
 /**

@@ -1,0 +1,14 @@
+sc:
+  bus:
+   subscribe:
+     subscribers:
+       - topic: device_alarm
+         condition: tenantId=1
+         pushType: 0
+         receiveUrl: ''
+       - topic:
+         condition: ''
+         pushType: 0
+         receiveUrl: ''
+
+

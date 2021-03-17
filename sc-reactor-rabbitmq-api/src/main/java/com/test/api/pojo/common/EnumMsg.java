@@ -1,4 +1,4 @@
-package com.test.server.pojo.common;
+package com.test.api.pojo.common;
 
 /**
  * @author 费世程

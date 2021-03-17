@@ -1,4 +1,4 @@
-package com.test.server.pojo.common;
+package com.test.api.pojo.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

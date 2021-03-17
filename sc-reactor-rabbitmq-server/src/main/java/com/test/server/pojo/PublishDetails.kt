@@ -10,7 +10,7 @@ import java.util.*
  */
 class PublishDetails {
 
-  val eventId = UUID.randomUUID().toString().replace("-", "")
+  val eventId: String = UUID.randomUUID().toString().replace("-", "")
   val eventMessage: EventMessage<Any> = EventMessage()
   val subscribers: List<SubscribeSnapshot> = emptyList()
   val needDelay: Boolean = eventMessage.delayMillis > 0
