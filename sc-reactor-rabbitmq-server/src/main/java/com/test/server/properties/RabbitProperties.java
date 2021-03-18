@@ -45,7 +45,7 @@ public class RabbitProperties {
   @Data
   public static class RabbitServer {
     private String host;
-    private String port;
+    private Integer port;
   }
 
 }

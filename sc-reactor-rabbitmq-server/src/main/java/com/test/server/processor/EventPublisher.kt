@@ -1,6 +1,7 @@
 package com.test.server.processor
 
 import com.test.api.pojo.common.Res
+import com.test.server.pojo.PublishDetails
 import reactor.core.publisher.Mono
 
 /**
@@ -9,6 +10,6 @@ import reactor.core.publisher.Mono
  */
 interface EventPublisher<T> {
 
-  fun publishOne(): Mono<Res<T>>
+  fun publishOne(publishDetails: PublishDetails): Mono<Res<T>>
 
 }
