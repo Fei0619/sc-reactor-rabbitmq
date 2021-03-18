@@ -1,5 +1,7 @@
 package com.test.server.push
 
+import com.test.server.pojo.EventMessage
+import com.test.server.pojo.SubscribeSnapshot
 import reactor.core.publisher.Mono
 import javax.annotation.PostConstruct
 
@@ -19,7 +21,7 @@ abstract class Pusher {
 
   companion object {
 
-    fun doPush(): Mono<Unit> {
+    fun doPush(eventMessage: EventMessage<*>, subscribe: SubscribeSnapshot): Mono<Unit> {
       TODO()
     }
 
