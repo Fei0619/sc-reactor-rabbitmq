@@ -2,6 +2,7 @@ package com.test.api.service
 
 import com.test.api.pojo.SubscribeDetails
 import com.test.api.properties.EventBusClientProperties
+import org.springframework.beans.factory.InitializingBean
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -10,11 +11,16 @@ import javax.annotation.PostConstruct
  * @date 2021/3/17 13:55
  */
 @Component
-class SubscribeService(private val eventBusClientProperties: EventBusClientProperties) {
+class SubscribeFactory(private val eventBusClientProperties: EventBusClientProperties) {
 
   @PostConstruct
-  fun subscribe() {
-
+  fun init() {
+    eventBusClientProperties.subscribers!!.stream().map { subscriber ->
+      val topic = subscriber.topic
+      val condition = subscriber.condition
+      val pushType = subscriber.pushType
+      val receiveUrl = subscriber.receiveUrl
+    }
   }
 
   companion object {

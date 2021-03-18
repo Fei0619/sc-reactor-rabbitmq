@@ -12,6 +12,6 @@ class SubscribeDetails {
   var pushType: Int = 0
   var serviceName: String = ""
   var url: String = ""
-  var conditions: Set<String> = emptySet()
+  var conditions: List<Set<String>> = emptyList()
 
 }

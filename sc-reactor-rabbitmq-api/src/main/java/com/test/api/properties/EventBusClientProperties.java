@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "sc.bus.subscribe")
 public class EventBusClientProperties {
 
-  private List<Subscriber> subscribers;
+  private List<Subscriber> subscribers = Collections.emptyList();
 
   @Data
   public static class Subscriber {

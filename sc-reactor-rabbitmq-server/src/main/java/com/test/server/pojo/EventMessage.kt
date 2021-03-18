@@ -12,7 +12,7 @@ class EventMessage<T> {
 
   var eventCode: String = ""
   var broadcast: Boolean = false
-  var conditions: Set<String> = Collections.emptySet()
+  var conditions: Map<String, Set<String>> = emptyMap()
   var payload: T? = null
   var delayMillis: Long = -1L
   val createTimestamp = System.currentTimeMillis()
