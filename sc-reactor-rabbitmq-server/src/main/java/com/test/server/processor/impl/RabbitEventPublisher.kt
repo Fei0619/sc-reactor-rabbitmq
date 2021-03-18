@@ -2,8 +2,8 @@ package com.test.server.processor.impl
 
 import com.test.server.processor.EventPublisher
 import com.test.api.pojo.common.Res
-import com.test.server.processor.Destroyable
-import com.test.server.processor.Initable
+import com.test.api.Destroyable
+import com.test.api.Initable
 import com.test.server.properties.RabbitProperties
 import reactor.core.publisher.Mono
 
