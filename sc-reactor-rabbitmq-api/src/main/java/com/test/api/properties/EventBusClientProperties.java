@@ -18,10 +18,11 @@ import java.util.List;
 @ConfigurationProperties(prefix = "sc.bus.subscribe")
 public class EventBusClientProperties {
 
-  private List<Subscriber> subscribers = Collections.emptyList();
+  private String serviceName = "";
+  private List<SubscriberProperties> subscribers = Collections.emptyList();
 
   @Data
-  public static class Subscriber {
+  public static class SubscriberProperties {
     private String topic;
     private String condition;
     private Integer pushType;
