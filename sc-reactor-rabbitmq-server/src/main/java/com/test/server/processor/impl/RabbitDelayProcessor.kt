@@ -8,6 +8,7 @@ import com.test.server.properties.PushProperties
 import com.test.server.properties.RabbitProperties
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 import reactor.rabbitmq.Sender
 
 /**
@@ -22,14 +23,12 @@ class RabbitDelayProcessor(private val rabbitLoadBalancer: LoadBalancer<Sender>,
 
   override fun delay(publishDetails: PublishDetails): Mono<Unit> {
     log.debug("delay message -> {}", JsonUtils.toJsonString(publishDetails))
-    TODO()
+    return Unit.toMono()
   }
 
   override fun init() {
-    TODO()
   }
 
   override fun destroy() {
-    TODO()
   }
 }
