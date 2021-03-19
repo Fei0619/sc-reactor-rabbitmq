@@ -28,6 +28,11 @@ public class RabbitProperties {
   private String password = "";
   private List<RabbitServer> servers = new ArrayList<>();
   /**
+   * 当某一节点被标记为不可用时，等待一段时间后尝试将其重新加入负载均衡服务列表
+   * 如果该值小于0，则该节点永远不会重新加入负载均衡
+   */
+  private long reloadUnavailableNodeDelaySeconds = 600L;
+  /**
    * 是否开启消息持久化
    */
   private boolean enableMessagePersistence = false;
