@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
  * @author 费世程
  * @date 2021/3/18 14:05
  */
-interface DelayProcessor:Initable,Destroyable {
+interface DelayProcessor : Initable, Destroyable {
 
   fun delay(publishDetails: PublishDetails): Mono<Unit>
 

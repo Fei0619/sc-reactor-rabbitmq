@@ -51,6 +51,7 @@ public class RabbitProperties {
   public static class RabbitServer {
     private String host;
     private Integer port;
+    private Integer weight = 10;
   }
 
 }

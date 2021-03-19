@@ -1,7 +1,10 @@
 package com.test.server.processor.impl
 
 import com.rabbitmq.client.AMQP
+import com.rabbitmq.client.AlreadyClosedException
 import com.rabbitmq.client.Delivery
+import com.test.api.loadbalancer.LoadBalancer
+import com.test.api.loadbalancer.Server
 import com.test.server.processor.EventPublisher
 import com.test.api.pojo.common.Res
 import com.test.api.utils.JsonUtils
@@ -11,6 +14,7 @@ import com.test.server.properties.PushProperties
 import com.test.server.properties.RabbitProperties
 import com.test.server.push.Pusher
 import com.test.server.share.RabbitUtils
+import org.bouncycastle.crypto.tls.ConnectionEnd.server
 import org.slf4j.LoggerFactory
 import reactor.core.Disposable
 import reactor.core.publisher.Mono
@@ -19,6 +23,7 @@ import reactor.kotlin.core.publisher.toMono
 import reactor.rabbitmq.ConsumeOptions
 import reactor.rabbitmq.OutboundMessage
 import reactor.rabbitmq.Receiver
+import reactor.rabbitmq.Sender
 import java.lang.Exception
 import java.nio.charset.StandardCharsets
 
@@ -26,7 +31,8 @@ import java.nio.charset.StandardCharsets
  * @author 费世程
  * @date 2021/3/17 9:11
  */
-class RabbitEventPublisher(private val rabbitProperties: RabbitProperties,
+class RabbitEventPublisher(private val rabbitLoadBalancer: LoadBalancer<Sender>,
+                           private val rabbitProperties: RabbitProperties,
                            private val pushProperties: PushProperties,
                            private val delayProcessor: DelayProcessor)
   : EventPublisher<Unit> {
@@ -34,6 +40,7 @@ class RabbitEventPublisher(private val rabbitProperties: RabbitProperties,
   private val log = LoggerFactory.getLogger(RabbitEventPublisher::class.java)
   private val disposes = ArrayList<Disposable>()
   private val receivers = ArrayList<Receiver>()
+  private val retry = 3
 
   private val basicProperties = AMQP.BasicProperties().builder()
       // 设置消息是否持久化：1-非持久化，2-持久化
@@ -46,8 +53,20 @@ class RabbitEventPublisher(private val rabbitProperties: RabbitProperties,
     } else {
       OutboundMessage(rabbitProperties.exchangeName, rabbitProperties.eventMessageQueue, message.toByteArray(StandardCharsets.UTF_8))
     }
-
-    TODO()
+    val selectedServer: Server<Sender> = rabbitLoadBalancer.select(retry)
+        ?: return Res.error<Unit>("服务暂不可用!").toMono()
+    log.debug("rabbitmqLoadbalancer select -> {} ", selectedServer.id)
+    return selectedServer.server.sendWithPublishConfirms(outboundMessage.toMono())
+        .collectList().map { Res.success<Unit>() }
+        .doOnError { ex ->
+          if (ex is AlreadyClosedException) {
+            log.error("rabbitmq AlreadyClosed -> {}", ex.message)
+            rabbitLoadBalancer.unavailable(selectedServer)
+          } else {
+            log.error("rabbitmq 服务调用异常 -> {}", ex.message)
+            rabbitLoadBalancer.onInvokeFail(selectedServer)
+          }
+        }
   }
 
   override fun init() {
