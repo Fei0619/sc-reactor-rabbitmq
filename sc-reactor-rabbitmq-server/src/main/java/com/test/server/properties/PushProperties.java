@@ -1,6 +1,5 @@
 package com.test.server.properties;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import java.time.Duration;
  * @author 费世程
  * @date 2021/3/18 15:02
  */
-@Data
 @Component
 @RefreshScope
 @ConfigurationProperties(prefix = "sc.bus.push")
@@ -30,5 +28,33 @@ public class PushProperties {
       concurrency = 256;
     }
     this.concurrency = concurrency;
+  }
+
+  public Duration getConnectionTimeout() {
+    return connectionTimeout;
+  }
+
+  public void setConnectionTimeout(Duration connectionTimeout) {
+    this.connectionTimeout = connectionTimeout;
+  }
+
+  public Duration getReadTimeout() {
+    return readTimeout;
+  }
+
+  public void setReadTimeout(Duration readTimeout) {
+    this.readTimeout = readTimeout;
+  }
+
+  public Duration getWriteTimeout() {
+    return writeTimeout;
+  }
+
+  public void setWriteTimeout(Duration writeTimeout) {
+    this.writeTimeout = writeTimeout;
+  }
+
+  public int getConcurrency() {
+    return concurrency;
   }
 }

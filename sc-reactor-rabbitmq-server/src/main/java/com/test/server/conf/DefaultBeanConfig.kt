@@ -8,8 +8,12 @@ import com.test.server.processor.impl.RabbitEventPublisher
 import com.test.server.properties.PushProperties
 import com.test.server.properties.RabbitProperties
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.client.reactive.ReactorClientHttpConnector
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.netty.http.client.HttpClient
 import reactor.rabbitmq.Sender
 
 /**
@@ -31,6 +35,23 @@ open class DefaultBeanConfig(private val rabbitProperties: RabbitProperties,
   @ConditionalOnMissingBean
   open fun delayProcessor(rabbitLoadBalancer: LoadBalancer<Sender>): DelayProcessor {
     return RabbitDelayProcessor(rabbitLoadBalancer, pushProperties, rabbitProperties)
+  }
+
+  @Bean
+  open fun reactorClientHttpConnector(httpClient: HttpClient): ReactorClientHttpConnector {
+    return ReactorClientHttpConnector(httpClient)
+  }
+
+  @Bean
+  @LoadBalanced
+  open fun loadBalancedWebClientBuilder(reactorClientHttpConnector: ReactorClientHttpConnector)
+      : WebClient.Builder {
+    return WebClient.builder().clientConnector(reactorClientHttpConnector)
+  }
+
+  @Bean
+  open fun webClient(reactorClientHttpConnector: ReactorClientHttpConnector): WebClient {
+    return WebClient.builder().clientConnector(reactorClientHttpConnector).build()
   }
 
 }
